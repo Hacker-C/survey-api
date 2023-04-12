@@ -1,5 +1,6 @@
 package com.cg.util;
 
+import com.cg.pojo.dto.PageDto;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
@@ -29,12 +30,13 @@ public class CopyBeanUtil {
                 .collect(Collectors.toList());
     }
 
-//    public static <T> PageDto<T> copyPage(Long total, List<T> list) {
-//        PageDto<T> result = new PageDto<>();
-//        result.setRows(list);
-//        result.setTotal(total);
-//        return result;
-//    }
+    public static <V, T> PageDto<V> copyPage(Long total, List<T> source, Class<V> clazz) {
+        PageDto<V> result = new PageDto<>();
+        List<V> list = copyList(source, clazz);
+        result.setRows(list);
+        result.setTotal(total);
+        return result;
+    }
 //    public static void main(String[] args) {
 //        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //        String encode = passwordEncoder.encode("Lzx123");

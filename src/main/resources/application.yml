@@ -27,8 +27,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id_type: auto
-#oss:
-#  accessKey: veL-432B__8wxMvYk_I3OwVyyHMaw5aHyEQEvdb9
-#  secretKey: CsG4yBluh_Tfe_fRqc3t63p3x236oDkU2BKE4hVY
-#  bucket: lzx-medicine
-#  dns: http://rq2c8ho9h.hn-bkt.clouddn.com/
+oss:
+  accessKey: TMEsu8Oct9Yn0aWVqn6l9l0SMfHnvNy42CdFyOXM
+  secretKey: bYo_EdwP0LBgVEke426c_q6m6PDicfHq4Ko5saka
+  bucketName: surveyspace
+  dnsPath: http://rszk6rqjm.hn-bkt.clouddn.com

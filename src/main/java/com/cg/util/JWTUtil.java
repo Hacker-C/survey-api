@@ -10,7 +10,7 @@ public class JWTUtil {
     private static String secret= "security";
 
 
-    private static Long expiration =  60L * 60 * 1000;
+    private static Long expiration =  24L * 60 * 60 * 1000;
 
     /**
      * 创建token
