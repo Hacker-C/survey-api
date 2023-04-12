@@ -1,0 +1,34 @@
+#端口
+server:
+  port: 8082
+#数据库
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    url: jdbc:mysql://localhost:3306/survey?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: lzx123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  # 文件大小限制
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 5MB
+#mybatis-plus
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id_type: auto
+#oss:
+#  accessKey: veL-432B__8wxMvYk_I3OwVyyHMaw5aHyEQEvdb9
+#  secretKey: CsG4yBluh_Tfe_fRqc3t63p3x236oDkU2BKE4hVY
+#  bucket: lzx-medicine
+#  dns: http://rq2c8ho9h.hn-bkt.clouddn.com/
