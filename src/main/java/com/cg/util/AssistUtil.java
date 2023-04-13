@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class AssistUtil {
     private AssistUtil(){}
+    public static final String allChar = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public static void assertionWithSystemException(Boolean flag, String msg) {
         if(flag)
@@ -41,5 +42,13 @@ public class AssistUtil {
     public static boolean checkTime(LocalDateTime time) {
         LocalDateTime now = LocalDateTime.now();
         return time.isBefore(now);
+    }
+
+    public static String getLink() {
+        StringBuilder sb = new StringBuilder();
+        Random r = new Random();
+        for (int i = 0; i < 12; i++)
+                sb.append(allChar.charAt(r.nextInt(allChar.length())));
+        return sb.toString();
     }
 }

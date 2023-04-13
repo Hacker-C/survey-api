@@ -2,11 +2,11 @@ package com.cg.pojo.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
-public class QuestionDto {
+public class QuestionDto3 {
     private Integer id;
 
     private String title;
@@ -15,8 +15,5 @@ public class QuestionDto {
 
     private Integer required;
 
-    private LocalDateTime createTime;
-
-
-
+    private List<OptionDto> options;
 }

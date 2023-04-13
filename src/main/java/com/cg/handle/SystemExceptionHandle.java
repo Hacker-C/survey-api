@@ -24,6 +24,8 @@ public class SystemExceptionHandle {
             return Result.fail(INTEGER_TRANSFORM_ERROR);
         }else if(exception instanceof BadCredentialsException) {
             throw exception;
+        }else if(exception instanceof NullPointerException) {
+            return Result.fail(NULL_POINTER);
         }
         return Result.fail(exception.getMessage());
     }

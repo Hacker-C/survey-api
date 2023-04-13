@@ -41,6 +41,11 @@ public class SurveyController {
         return surveyService.listSurveyName();
     }
 
+    @GetMapping("{id}")
+    public Result getSurveyOverAll(@PathVariable Integer id) {
+        return surveyService.getSurveyOverAll(id);
+    }
+
     //TODO 分析问卷的答题情况
 
 }

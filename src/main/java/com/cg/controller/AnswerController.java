@@ -1,13 +1,10 @@
 package com.cg.controller;
 
-import com.cg.pojo.Answer;
+import com.cg.pojo.vo.AnswerVo;
+import com.cg.result.Result;
 import com.cg.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("answer")
@@ -16,8 +13,13 @@ public class AnswerController {
     private AnswerService answerService;
 
 
-    @GetMapping
-    public List<Answer> getUserList() {
-        return answerService.list();
+    @PostMapping
+    public Result saveAnswer(@RequestBody AnswerVo answerVo) {
+        return answerService.saveAnswer(answerVo);
+    }
+
+    @GetMapping("{id}")
+    public Result analysisAnswer(@PathVariable(value = "id") Integer surveyId) {
+        return answerService.analysisAnswer(surveyId);
     }
 }
