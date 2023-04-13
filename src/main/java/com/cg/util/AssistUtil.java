@@ -3,6 +3,7 @@ package com.cg.util;
 import com.cg.result.SystemException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.UUID;
@@ -35,5 +36,10 @@ public class AssistUtil {
         int index = filename.lastIndexOf(".");
         String fileType = filename.substring(index);
         return new StringBuilder().append(dataPath).append("/").append(uuid).append(fileType).toString();
+    }
+
+    public static boolean checkTime(LocalDateTime time) {
+        LocalDateTime now = LocalDateTime.now();
+        return time.isBefore(now);
     }
 }

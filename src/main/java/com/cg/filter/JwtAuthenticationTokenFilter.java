@@ -33,6 +33,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
+       if(JWTUtil.isExpiration(token))
+            System.out.println("token过期了");
         String useId = null;
         try {
             useId = JWTUtil.getUserIdFromToken(token);
