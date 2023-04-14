@@ -32,6 +32,11 @@ public class QuestionController {
         return questionService.listQuestion(pageNum, pageSize, surveyId);
     }
 
+    /**
+     * 辅助搜索问题下的选项
+     * @param surveyId
+     * @return
+     */
     @GetMapping("name")
     public Result listQuestionName(Integer surveyId) {
         return questionService.listQuestionName(surveyId);

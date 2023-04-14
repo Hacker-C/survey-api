@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class AnswerVo {
     private Integer surveyId;
-    private List<AnswerVo2> answerVo2s;
+    private List<AnswerVo2> answers;
 }

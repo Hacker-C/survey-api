@@ -36,16 +36,26 @@ public class SurveyController {
         return surveyService.listSurvey(pageNum, pageSize, status);
     }
 
+    /**
+     * 辅助搜索问卷下的问题
+     * @return
+     */
+
     @GetMapping("name")
     public Result listSurveyName() {
         return surveyService.listSurveyName();
     }
+
+    /**
+     * 根据问卷ID获取整个问卷的信息
+     * @param id
+     * @return
+     */
 
     @GetMapping("{id}")
     public Result getSurveyOverAll(@PathVariable Integer id) {
         return surveyService.getSurveyOverAll(id);
     }
 
-    //TODO 分析问卷的答题情况
 
 }

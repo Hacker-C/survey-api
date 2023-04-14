@@ -18,7 +18,7 @@ public class OptionalController {
         return optionService.saveOption(optionVo);
     }
     @PutMapping
-    public Result saveOption(@RequestBody OptionVo2 optionVo2) {
+    public Result updateOption(@RequestBody OptionVo2 optionVo2) {
         return optionService.updateOption(optionVo2);
     }
 

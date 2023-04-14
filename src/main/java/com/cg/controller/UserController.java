@@ -38,6 +38,13 @@ public class UserController {
         return userService.listUser(pageNum, pageSize, nickname);
     }
 
+    /**
+     * 禁用用户和启用用户时调用
+     * @param id 用户ID
+     * @param status 对应的状态字段
+     * @return
+     */
+
     @PutMapping("{id}")
     public Result forbidUser(@PathVariable Long id, Integer status) {
         return userService.forbidUser(id, status);

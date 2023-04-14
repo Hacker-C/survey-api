@@ -34,6 +34,11 @@ public class UploadController {
     @Value("${oss.dnsPath}")
     private String dnsPath;
 
+    /**
+     * 七牛云上传头像
+     * @param file
+     * @return
+     */
     @PostMapping
     public Result uploadFile(MultipartFile file) {
         assertionWithSystemException(Objects.isNull(file), FILE_NOT_EMPTY);

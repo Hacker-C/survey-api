@@ -1,16 +1,9 @@
 package com.cg.pojo.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.io.Serializable;
-
-/**
- * @TableName option
- */
-@TableName(value ="option")
 @Data
-public class OptionDto implements Serializable {
+public class OptionDto {
     private Integer id;
 
     private String content;

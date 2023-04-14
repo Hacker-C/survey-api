@@ -47,6 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //限制对应的路径验证
                 .antMatchers("/user/register").anonymous()
                 .antMatchers("/user/login").anonymous()
+                .antMatchers("/link/**").permitAll()
+                .antMatchers("/answer").permitAll()
                 //其他请求一律通过
                 .anyRequest().authenticated();
         http.exceptionHandling()
