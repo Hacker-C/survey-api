@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -20,6 +22,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private UserService userService;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
         assertionWithRuntimeException(Objects.isNull(user), USER_NOT_EXIST);

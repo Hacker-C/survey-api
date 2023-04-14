@@ -1,6 +1,7 @@
 package com.cg.controller;
 
 import com.cg.pojo.dto.UserDto;
+import com.cg.pojo.vo.LoginVo;
 import com.cg.pojo.vo.PasswordVo;
 import com.cg.result.Result;
 import com.cg.service.UserService;
@@ -16,8 +17,8 @@ public class UserController {
 
 
     @PostMapping("register")
-    public Result saveUser(String username, String password) {
-        return userService.saveUser(username, password);
+    public Result saveUser(@RequestBody LoginVo loginVo) {
+        return userService.saveUser(loginVo);
     }
 
     @PostMapping("login")
