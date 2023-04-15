@@ -26,6 +26,11 @@ public class UserController {
         return userService.login(username, password);
     }
 
+    @PostMapping("logout")
+    public Result logout() {
+        return userService.logout();
+    }
+
     @GetMapping
     public Result getUser() {
         return userService.getUser();

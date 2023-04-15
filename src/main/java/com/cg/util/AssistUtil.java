@@ -5,6 +5,7 @@ import com.cg.result.SystemException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -42,6 +43,18 @@ public class AssistUtil {
     public static boolean checkTime(LocalDateTime time) {
         LocalDateTime now = LocalDateTime.now();
         return time.isBefore(now);
+    }
+
+    public static boolean checkType(Integer type) {
+        if(Objects.isNull(type))
+            return true;
+        boolean result = true;
+        for(int i = 1; i <= 4; i++)
+            if(type == i) {
+                result = false;
+                break;
+            }
+        return result;
     }
 
     public static String getLink() {

@@ -2,6 +2,7 @@ package com.cg.pojo.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -11,6 +12,6 @@ public class SurveyDto {
     private String title;
     private Integer status;
     private String description;
-    private Date expireTime;
-    private Date createTime;
+    private LocalDateTime expireTime;
+    private LocalDateTime createTime;
 }
