@@ -47,6 +47,7 @@ public class SystemConst {
     public static final String NULL_POINTER = "空指针异常";
     public static final String ANSWER_NOT_EMPTY = "答案不能为空";
     public static final String LINK_NOT_EXIST = "链接不存在";
+    public static final String IP_EXIST = "用户已填写问卷";
     public static final String SURVEY_NOT_PUBLISH = "问卷还未发布";
     public static final String SURVEY_PUBLISH = "问卷已发布";
 

@@ -23,7 +23,6 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         log.error("authentication entry point:{}", e.getMessage());
-        log.error("request path:{}", httpServletRequest.getRequestURL());
         String result = null;
         if(e instanceof BadCredentialsException) result = JSON.toJSONString(Result.fail(USERNAME_OR_PASSWORD_ERROR));
         else if(e instanceof InsufficientAuthenticationException)result = JSON.toJSONString(Result.fail(NO_AUTHORITY));

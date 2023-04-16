@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
     private SurveyService surveyService;
 
     @Autowired
-    private OptionService optionService;
+    private LogService logService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -107,7 +109,12 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
             answer.setSurveyId(surveyId);
             return answer;
         }).collect(Collectors.toList());
-
+        // 执行完毕后记录用户的IP地址
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String IP = requestAttributes.getRequest().getRemoteHost();
+        Log log = new Log();
+        log.setIp(IP);
+        logService.save(log);
         return saveBatch(answers) ? Result.ok() : Result.fail(SAVE_FAIL);
     }
 

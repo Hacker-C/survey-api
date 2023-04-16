@@ -47,7 +47,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("后端接口文档")
                 .description("问卷系统后端接口说明")
-                .contact(new Contact("lzx", "http://cg.com","12138@qq.com"))
+                .contact(new Contact("cg", "http://cg.com","12138@qq.com"))
                 .version("v 1.0.0")
                 .build();
     }
