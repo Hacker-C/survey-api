@@ -50,7 +50,6 @@ public class SystemConst {
     public static final String SURVEY_NOT_PUBLISH = "问卷还未发布";
     public static final String SURVEY_PUBLISH = "问卷已发布";
 
-
     public static final String SAVE_FAIL = "保存数据失败";
     public static final String UPDATE_FAIL = "更新数据失败";
     public static final String DELETE_FAIL = "删除数据失败";

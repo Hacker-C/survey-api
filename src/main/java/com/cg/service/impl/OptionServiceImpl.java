@@ -22,6 +22,9 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -53,10 +56,11 @@ public class OptionServiceImpl extends ServiceImpl<OptionMapper, Option>
     private SurveyService surveyService;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result saveOption(OptionVo optionVo) {
         Integer questionId = optionVo.getQuestionId();Integer sort = optionVo.getSort();
         String content = optionVo.getContent();
-        assertionWithSystemException(Objects.isNull(content), CONTENT_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(content), CONTENT_NOT_EMPTY);
         boolean success = Objects.isNull(sort) || sort < 0;
         assertionWithSystemException(success, SORT_ERROR);
         assertionWithSystemException(Objects.isNull(questionId), QUESTION_NOT_EXIST);
@@ -71,10 +75,11 @@ public class OptionServiceImpl extends ServiceImpl<OptionMapper, Option>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result updateOption(OptionVo2 optionVo2) {
         Integer questionId = optionVo2.getQuestionId();Integer sort = optionVo2.getSort();
         String content = optionVo2.getContent(); Integer id = optionVo2.getId();
-        assertionWithSystemException(Objects.isNull(content), CONTENT_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(content), CONTENT_NOT_EMPTY);
         boolean success = Objects.isNull(sort) || sort < 0;
         assertionWithSystemException(success, SORT_ERROR);
         assertionWithSystemException(Objects.isNull(questionId), QUESTION_NOT_EXIST);
@@ -91,6 +96,7 @@ public class OptionServiceImpl extends ServiceImpl<OptionMapper, Option>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result deleteOption(Integer id) {
         Option option = getById(id);
         assertionWithSystemException(Objects.isNull(option), OPTION_NOT_EXIST);
@@ -100,9 +106,10 @@ public class OptionServiceImpl extends ServiceImpl<OptionMapper, Option>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result listOption(Integer pageNum, Integer pageSize, Integer questionId) {
         assertionWithSystemException(Objects.isNull(pageNum) || Objects.isNull(pageSize), PARAMETER_ERROR);
-        boolean success = Objects.nonNull(questionId) || Objects.isNull(questionService.getById(questionId));
+        boolean success = Objects.nonNull(questionId) && Objects.isNull(questionService.getById(questionId));
         assertionWithRuntimeException(success, SURVEY_NOT_EXIST);
         Page<Option> pageInfo  = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Option> queryWrapper;

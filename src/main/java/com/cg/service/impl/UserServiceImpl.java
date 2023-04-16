@@ -25,6 +25,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
@@ -49,6 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RedisTemplate redisTemplate;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result saveUser(LoginVo loginVo) {
         String username = loginVo.getUsername(), password = loginVo.getPassword(), repassword = loginVo.getRePassword();
         assertionWithSystemException(!StringUtils.hasText(username), USERNAME_NOT_EMPTY);
@@ -61,9 +64,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result login(String username, String password) {
-        assertionWithRuntimeException(!StringUtils.hasText(username), USERNAME_NOT_EMPTY);
-        assertionWithRuntimeException(!StringUtils.hasText(password), PASSWORD_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(username), USERNAME_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(password), PASSWORD_NOT_EMPTY);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         assertionWithSystemException(Objects.isNull(authenticate), USERNAME_OR_PASSWORD_ERROR);
@@ -84,6 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result getUser() {
         User user = getById(getUserId());
         UserDto userDto = CopyBeanUtil.copy(user, UserDto.class);
@@ -91,18 +96,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result updateUser(UserDto userDto) {
-        assertionWithRuntimeException(!Pattern.matches(EMAIL_REGEX, userDto.getEmail()), EMAIL_ERROR);
-        assertionWithRuntimeException(!Pattern.matches(PHONE_REGEX, userDto.getPhone()), PHONE_ERROR);
+        assertionWithSystemException(!Pattern.matches(EMAIL_REGEX, userDto.getEmail()), EMAIL_ERROR);
+        assertionWithSystemException(!Pattern.matches(PHONE_REGEX, userDto.getPhone()), PHONE_ERROR);
         Integer gender = userDto.getGender();
         boolean success = Objects.isNull(gender) || (gender != 1 && gender != 0);
-        assertionWithRuntimeException(success, GENDER_ERROR);
+        assertionWithSystemException(success, GENDER_ERROR);
         User user = CopyBeanUtil.copy(userDto, User.class);
         user.setId(getUserId());
         return updateById(user) ? Result.ok() : Result.fail(UPDATE_FAIL);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result listUser(Integer pageNum, Integer pageSize, String nickname) {
         assertionWithSystemException(Objects.isNull(pageNum) || Objects.isNull(pageSize), PARAMETER_ERROR);
         Page<User> pageInfo  = new Page<>(pageNum, pageSize);
@@ -114,6 +121,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result forbidUser(Long id, Integer status) {
         boolean success = Objects.isNull(status) || (status != 1 && status != 0);
         assertionWithRuntimeException(success, STATUS_ERROR);
@@ -124,6 +132,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result deleteUser(Long id) {
         User user = getById(id);
         assertionWithSystemException(Objects.isNull(user), USER_NOT_EXIST);
@@ -133,11 +142,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result updatePassword(PasswordVo passwordVo) {
         String password = passwordVo.getOldPassword(), newPassword = passwordVo.getNewPassword(), rePassword = passwordVo.getRePassword();
-        assertionWithRuntimeException(!StringUtils.hasText(password), PASSWORD_NOT_EMPTY);
-        assertionWithRuntimeException(!StringUtils.hasText(newPassword), NEW_PASSWORD_NOT_EMPTY);
-        assertionWithRuntimeException(!newPassword.equals(rePassword), PASSWORD_NOT_CONSISTENT);
+        assertionWithSystemException(!StringUtils.hasText(password), PASSWORD_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(newPassword), NEW_PASSWORD_NOT_EMPTY);
+        assertionWithSystemException(!newPassword.equals(rePassword), PASSWORD_NOT_CONSISTENT);
         User user = getById(getUserId());
         assertionWithSystemException(!passwordEncoder.matches(password, user.getPassword()), PASSWORD_ERROR);
         user.setPassword(passwordEncoder.encode(newPassword));

@@ -20,6 +20,9 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -42,16 +45,17 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Autowired
     private UserService userService;
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result saveQuestion(QuestionVo questionVo) {
         String title = questionVo.getTitle();Integer surveyId = questionVo.getSurveyId();
         Integer type = questionVo.getType(), required = questionVo.getRequired();
-        assertionWithSystemException(Objects.isNull(title), TITLE_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(title), TITLE_NOT_EMPTY);
         Survey survey = surveyService.getById(surveyId);
         boolean success = Objects.isNull(survey) || !survey.getUserId().equals(getUserId());
         assertionWithSystemException(success, SURVEY_NOT_EXIST);
         assertionWithSystemException(survey.getStatus() != 0, SURVEY_PUBLISH);
         assertionWithSystemException(checkType(type), TYPE_ERROR);
-        success = Objects.nonNull(required) || (required != 1 && required != 0);
+        success = Objects.nonNull(required) && required != 1 && required != 0;
         assertionWithSystemException(success, REQUIRED_ERROR);
         assertionWithSystemException(count(new LambdaQueryWrapper<Question>().eq(Question::getTitle, title)) > 0, TITLE_EXIST);
         Question question = CopyBeanUtil.copy(questionVo, Question.class);
@@ -59,17 +63,18 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result updateQuestion(QuestionVo2 questionVo2) {
         String title = questionVo2.getTitle();Integer surveyId = questionVo2.getSurveyId();
         Integer type = questionVo2.getType(), required = questionVo2.getRequired();
         Integer id = questionVo2.getId();
-        assertionWithSystemException(Objects.isNull(title), TITLE_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(title), TITLE_NOT_EMPTY);
         Survey survey = surveyService.getById(surveyId);
         boolean success = Objects.isNull(survey) || !survey.getUserId().equals(getUserId());
         assertionWithSystemException(success, SURVEY_NOT_EXIST);
         assertionWithSystemException(survey.getStatus() != 0, SURVEY_PUBLISH);
         assertionWithSystemException(checkType(type), TYPE_ERROR);
-        success = Objects.nonNull(required) || (required != 1 && required != 0);
+        success = Objects.nonNull(required) && (required != 1 && required != 0);
         assertionWithSystemException(success, REQUIRED_ERROR);
         assertionWithSystemException(count(new LambdaQueryWrapper<Question>().eq(Question::getTitle, title)) > 0, TITLE_EXIST);
         success = Objects.isNull(id) || Objects.isNull(getById(id));
@@ -79,6 +84,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result deleteQuestion(Integer id) {
         Question question = getById(id);
         assertionWithSystemException(Objects.isNull(question), QUESTION_NOT_EXIST);
@@ -89,9 +95,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result listQuestion(Integer pageNum, Integer pageSize, Integer surveyId) {
         assertionWithSystemException(Objects.isNull(pageNum) || Objects.isNull(pageSize), PARAMETER_ERROR);
-        boolean success = Objects.nonNull(surveyId) || Objects.isNull(surveyService.getById(surveyId));
+        boolean success = Objects.nonNull(surveyId) && Objects.isNull(surveyService.getById(surveyId));
         assertionWithRuntimeException(success, SURVEY_NOT_EXIST);
         Page<Question> pageInfo  = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Question> queryWrapper;
@@ -120,6 +127,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result listQuestionName(Integer surveyId) {
         Survey survey = surveyService.getById(surveyId);
         assertionWithSystemException(Objects.isNull(survey), SURVEY_NOT_EXIST);

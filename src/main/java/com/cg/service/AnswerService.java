@@ -2,6 +2,7 @@ package com.cg.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cg.pojo.Answer;
+import com.cg.pojo.vo.AnswerVo;
 import com.cg.result.Result;
 
 /**
@@ -12,4 +13,6 @@ import com.cg.result.Result;
 public interface AnswerService extends IService<Answer> {
 
     Result analysisAnswer(Integer surveyId);
+
+    Result saveAnswer(AnswerVo answerVo);
 }

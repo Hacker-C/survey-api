@@ -44,6 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/v2/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/favicon.ico").permitAll()
+                .antMatchers("/doc.html").permitAll()
                 //限制对应的路径验证
                 .antMatchers("/user/register").anonymous()
                 .antMatchers("/user/login").anonymous()

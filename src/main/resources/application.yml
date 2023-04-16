@@ -27,6 +27,9 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id_type: auto
+#  logging:
+#    level:
+#      org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping=trace
 oss:
   accessKey: TMEsu8Oct9Yn0aWVqn6l9l0SMfHnvNy42CdFyOXM
   secretKey: bYo_EdwP0LBgVEke426c_q6m6PDicfHq4Ko5saka

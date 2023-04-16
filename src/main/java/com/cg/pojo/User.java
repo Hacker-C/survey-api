@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * @TableName user
  */
-@TableName(value ="user")
+@TableName(value ="t_user")
 @Data
 @Accessors(chain = true)
 public class User implements Serializable {

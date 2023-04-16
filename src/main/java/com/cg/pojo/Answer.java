@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * @TableName answer
  */
-@TableName(value ="answer")
+@TableName(value ="t_answer")
 @Data
 public class Answer implements Serializable {
     private Integer id;

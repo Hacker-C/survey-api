@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * @TableName survey
  */
-@TableName(value ="survey")
+@TableName(value ="t_survey")
 @Data
 public class Survey implements Serializable {
     private Integer id;

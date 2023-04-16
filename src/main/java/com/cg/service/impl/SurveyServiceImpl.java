@@ -15,6 +15,8 @@ import com.cg.util.CopyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -46,11 +48,12 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
     @Autowired
     private OptionService optionService;
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result saveSurvey(SurveyVo surveyVo) {
         String title = surveyVo.getTitle();LocalDateTime expiration = surveyVo.getExpireTime();
-        assertionWithSystemException(Objects.isNull(title), TITLE_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(title), TITLE_NOT_EMPTY);
         assertionWithSystemException(Objects.isNull(expiration), EXPIRE_TIME_NOT_EMPTY);
-        assertionWithSystemException(checkTime(expiration), EXPIRE_TIME_NOT_EMPTY);
+        assertionWithSystemException(checkTime(expiration), EXPIRE_TIME_ERROR);
 
         assertionWithSystemException(count(new LambdaQueryWrapper<Survey>().eq(Survey::getTitle, title)) > 0, TITLE_EXIST);
         Survey survey = CopyBeanUtil.copy(surveyVo, Survey.class);
@@ -61,12 +64,13 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result updateSurvey(SurveyVo2 surveyVo2) {
         String title = surveyVo2.getTitle(); LocalDateTime expiration = surveyVo2.getExpireTime();
         Integer id = surveyVo2.getId(); Long userId = getUserId();
-        assertionWithSystemException(Objects.isNull(title), TITLE_NOT_EMPTY);
+        assertionWithSystemException(!StringUtils.hasText(title), TITLE_NOT_EMPTY);
         assertionWithSystemException(Objects.isNull(expiration), EXPIRE_TIME_NOT_EMPTY);
-        assertionWithSystemException(checkTime(expiration), EXPIRE_TIME_NOT_EMPTY);
+        assertionWithSystemException(checkTime(expiration), EXPIRE_TIME_ERROR);
         Survey survey = getOne(new LambdaQueryWrapper<Survey>().eq(Survey::getTitle, title).eq(Survey::getUserId, userId));
         assertionWithSystemException(Objects.nonNull(survey), TITLE_EXIST);
         boolean success = Objects.isNull(id) || Objects.isNull(getById(id));
@@ -77,6 +81,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result updateSurveyStatus(Integer id, Integer status) {
         boolean success = Objects.isNull(status) || (status != 1 && status != 0);
         assertionWithRuntimeException(success, STATUS_ERROR);
@@ -99,6 +104,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result deleteSurvey(Integer id) {
         Survey survey = getById(id);
         boolean success = Objects.isNull(survey) || !survey.getUserId().equals(getUserId());
@@ -112,9 +118,10 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result listSurvey(Integer pageNum, Integer pageSize, Integer status) {
         assertionWithSystemException(Objects.isNull(pageNum) || Objects.isNull(pageSize), PARAMETER_ERROR);
-        boolean success = Objects.nonNull(status) || (status != 1 && status != 0);
+        boolean success = Objects.nonNull(status) && status != 1 && status != 0;
         assertionWithRuntimeException(success, STATUS_ERROR);
         Page<Survey> pageInfo  = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Survey> queryWrapper;
@@ -135,6 +142,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result listSurveyName() {
         User user = userService.getById(getUserId());
         LambdaQueryWrapper<Survey> queryWrapper = null;
@@ -145,11 +153,13 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result getSurveyOverAll(Integer id) {
         Survey survey = getById(id);
         boolean success = Objects.isNull(survey) || !survey.getUserId().equals(getUserId());
         assertionWithSystemException(success, SURVEY_NOT_EXIST);
         assertionWithSystemException(survey.getStatus() != 1, SURVEY_NOT_PUBLISH);
+        //填入用户信息
         SurveyDto3 surveyDto3 = CopyBeanUtil.copy(survey, SurveyDto3.class);
         List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, id));
         List<QuestionDto3> questionDto3s = questions.stream().map(question -> {
@@ -159,12 +169,17 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
             return questionDto3;
         }).collect(Collectors.toList());
         surveyDto3.setQuestions(questionDto3s);
+        surveyDto3.setNickname(getUser().getNickname());
         return Result.ok(surveyDto3);
     }
 
     private Long getUserId() {
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return loginUser.getUser().getId();
+    }
+    private User getUser() {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return loginUser.getUser();
     }
 }
 
