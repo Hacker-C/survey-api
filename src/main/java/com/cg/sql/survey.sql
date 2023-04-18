@@ -119,6 +119,7 @@ DROP TABLE IF EXISTS `t_log`;
 CREATE TABLE `t_log`  (
                         `id` int NOT NULL AUTO_INCREMENT,
                         `ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                        `survey_id` int NOT NULL,
                         `create_time` datetime(0) NOT NULL,
                         `update_time` datetime(0) NOT NULL,
                         PRIMARY KEY (`id`) USING BTREE

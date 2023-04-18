@@ -17,6 +17,8 @@ public class Log implements Serializable {
 
     private String ip;
 
+    private Integer surveyId;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)

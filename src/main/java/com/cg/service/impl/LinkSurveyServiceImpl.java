@@ -40,13 +40,16 @@ public class LinkSurveyServiceImpl extends ServiceImpl<LinkSurveyMapper, LinkSur
 
     @Override
     public Result getSurveyByLinkId(Integer id) {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        String IP = requestAttributes.getRequest().getRemoteHost();
-        Log log = logService.getOne(new LambdaQueryWrapper<Log>().eq(Log::getIp, IP));
-        assertionWithSystemException(Objects.nonNull(log), IP_EXIST);
+
         LinkSurvey linkSurvey = getById(id);
         assertionWithSystemException(Objects.isNull(linkSurvey), LINK_NOT_EXIST);
         assertionWithSystemException(linkSurvey.getStatus() != 1, SURVEY_NOT_PUBLISH);
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String IP = requestAttributes.getRequest().getRemoteHost();
+        Log log = logService.getOne(new LambdaQueryWrapper<Log>().eq(Log::getIp, IP)
+                .eq(Log::getSurveyId, linkSurvey.getSurveyId()));
+        assertionWithSystemException(Objects.nonNull(log), IP_EXIST);
+
         Result result = surveyService.getSurveyOverAll(linkSurvey.getSurveyId());
         return Result.ok(result.getData());
     }

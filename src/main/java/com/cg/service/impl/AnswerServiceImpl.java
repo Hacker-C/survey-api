@@ -114,6 +114,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
         String IP = requestAttributes.getRequest().getRemoteHost();
         Log log = new Log();
         log.setIp(IP);
+        log.setSurveyId(surveyId);
         logService.save(log);
         return saveBatch(answers) ? Result.ok() : Result.fail(SAVE_FAIL);
     }

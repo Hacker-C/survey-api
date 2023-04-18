@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
 * @author WeepLee
 * @description 针对表【t_log】的数据库操作Service实现
-* @createDate 2023-04-16 16:10:37
+* @createDate 2023-04-18 17:58:42
 */
 @Service
 public class LogServiceImpl extends ServiceImpl<LogMapper, Log>
