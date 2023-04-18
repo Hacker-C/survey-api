@@ -1,5 +1,7 @@
 package com.cg.controller;
 
+import com.cg.pojo.dto.OptionDto;
+import com.cg.pojo.dto.PageDto;
 import com.cg.pojo.vo.OptionVo;
 import com.cg.pojo.vo.OptionVo2;
 import com.cg.result.Result;
@@ -28,7 +30,7 @@ public class OptionalController {
     }
 
     @GetMapping
-    public Result listOption(Integer pageNum, Integer pageSize, Integer questionId) {
+    public Result<PageDto<OptionDto>> listOption(Integer pageNum, Integer pageSize, Integer questionId) {
         return optionService.listOption(pageNum, pageSize, questionId);
     }
 }

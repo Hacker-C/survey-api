@@ -1,6 +1,9 @@
 package com.cg.controller;
 
+import com.cg.pojo.dto.LoginDto;
+import com.cg.pojo.dto.PageDto;
 import com.cg.pojo.dto.UserDto;
+import com.cg.pojo.dto.UserDto2;
 import com.cg.pojo.vo.LoginVo;
 import com.cg.pojo.vo.PasswordVo;
 import com.cg.result.Result;
@@ -22,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public Result login(String username, String password) {
+    public Result<LoginDto> login(String username, String password) {
         return userService.login(username, password);
     }
 
@@ -32,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping
-    public Result getUser() {
+    public Result<UserDto> getUser() {
         return userService.getUser();
     }
     @PostMapping
@@ -40,7 +43,7 @@ public class UserController {
         return userService.updateUser(userDto);
     }
     @GetMapping("list")
-    public Result listUser(Integer pageNum, Integer pageSize, String nickname) {
+    public Result<PageDto<UserDto2>> listUser(Integer pageNum, Integer pageSize, String nickname) {
         return userService.listUser(pageNum, pageSize, nickname);
     }
 

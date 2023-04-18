@@ -1,5 +1,6 @@
 package com.cg.controller;
 
+import com.cg.pojo.dto.AnswerDto;
 import com.cg.pojo.vo.AnswerVo;
 import com.cg.result.Result;
 import com.cg.service.AnswerService;
@@ -28,7 +29,7 @@ public class AnswerController {
      * @return
      */
     @GetMapping("{id}")
-    public Result analysisAnswer(@PathVariable(value = "id") Integer surveyId) {
+    public Result<AnswerDto> analysisAnswer(@PathVariable(value = "id") Integer surveyId) {
         return answerService.analysisAnswer(surveyId);
     }
 }

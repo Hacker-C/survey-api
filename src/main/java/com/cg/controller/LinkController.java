@@ -1,5 +1,6 @@
 package com.cg.controller;
 
+import com.cg.pojo.dto.SurveyDto3;
 import com.cg.result.Result;
 import com.cg.service.LinkSurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class LinkController {
      * @return
      */
     @GetMapping("{id}")
-    public Result getSurveyByLinkId(@PathVariable Integer id) {
+    public Result<SurveyDto3> getSurveyByLinkId(@PathVariable Integer id) {
         return linkSurveyService.getSurveyByLinkId(id);
     }
 }

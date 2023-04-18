@@ -40,7 +40,7 @@ public class UploadController {
      * @return
      */
     @PostMapping
-    public Result uploadFile(MultipartFile file) {
+    public Result<String> uploadFile(MultipartFile file) {
         assertionWithSystemException(Objects.isNull(file), FILE_NOT_EMPTY);
         String filename = file.getOriginalFilename();
         boolean flag = filename.endsWith(".png") || filename.endsWith(".jpg") || filename.endsWith(".jpeg");

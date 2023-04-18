@@ -1,11 +1,17 @@
 package com.cg.controller;
 
+import com.cg.pojo.dto.PageDto;
+import com.cg.pojo.dto.QuestionDto3;
+import com.cg.pojo.dto.SurveyDto;
+import com.cg.pojo.dto.SurveyDto2;
 import com.cg.pojo.vo.SurveyVo;
 import com.cg.pojo.vo.SurveyVo2;
 import com.cg.result.Result;
 import com.cg.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("survey")
@@ -32,7 +38,7 @@ public class SurveyController {
     }
 
     @GetMapping
-    public Result listSurvey(Integer pageNum, Integer pageSize, Integer status) {
+    public Result<PageDto<SurveyDto>> listSurvey(Integer pageNum, Integer pageSize, Integer status) {
         return surveyService.listSurvey(pageNum, pageSize, status);
     }
 
@@ -42,7 +48,7 @@ public class SurveyController {
      */
 
     @GetMapping("name")
-    public Result listSurveyName() {
+    public Result<List<SurveyDto2>> listSurveyName() {
         return surveyService.listSurveyName();
     }
 
@@ -53,7 +59,7 @@ public class SurveyController {
      */
 
     @GetMapping("{id}")
-    public Result getSurveyOverAll(@PathVariable Integer id) {
+    public Result<List<QuestionDto3>> getSurveyOverAll(@PathVariable Integer id) {
         return surveyService.getSurveyOverAll(id);
     }
 
