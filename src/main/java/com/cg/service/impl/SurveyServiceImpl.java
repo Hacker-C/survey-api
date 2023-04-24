@@ -192,7 +192,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
                     .eq(Survey::getUserId, user.getId()).orderByAsc(Survey::getCreateTime);
         }
         page(pageInfo, queryWrapper);
-        PageDto<SurveyDto2> pageDto = CopyBeanUtil.copyPage(pageInfo.getTotal(), pageInfo.getRecords(), SurveyDto2.class);
+        PageDto<SurveyDto> pageDto = CopyBeanUtil.copyPage(pageInfo.getTotal(), pageInfo.getRecords(), SurveyDto.class);
         return Result.ok(pageDto);
     }
 
@@ -225,7 +225,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
                     .eq(Survey::getUserId, user.getId()).orderByAsc(Survey::getCreateTime);
         }
         page(pageInfo, queryWrapper);
-        PageDto<SurveyDto2> pageDto = CopyBeanUtil.copyPage(pageInfo.getTotal(), pageInfo.getRecords(), SurveyDto2.class);
+        PageDto<SurveyDto> pageDto = CopyBeanUtil.copyPage(pageInfo.getTotal(), pageInfo.getRecords(), SurveyDto.class);
         return Result.ok(pageDto);
     }
 

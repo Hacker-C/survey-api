@@ -1,9 +1,6 @@
 package com.cg.controller;
 
-import com.cg.pojo.dto.PageDto;
-import com.cg.pojo.dto.QuestionDto3;
-import com.cg.pojo.dto.SurveyDto;
-import com.cg.pojo.dto.SurveyDto2;
+import com.cg.pojo.dto.*;
 import com.cg.pojo.vo.SurveyVo;
 import com.cg.pojo.vo.SurveyVo2;
 import com.cg.result.Result;
@@ -47,12 +44,12 @@ public class SurveyController {
     }
 
     @GetMapping("recycle")
-    public Result<PageDto<SurveyDto2>> listRecycleSurvey(Integer pageNum, Integer pageSize, String surveyName) {
+    public Result<PageDto<SurveyDto>> listRecycleSurvey(Integer pageNum, Integer pageSize, String surveyName) {
         return surveyService.listRecycleSurvey(pageNum, pageSize, surveyName);
     }
 
     @GetMapping("like")
-    public Result<PageDto<SurveyDto2>> listLikeSurvey(Integer pageNum, Integer pageSize, String surveyName) {
+    public Result<PageDto<SurveyDto>> listLikeSurvey(Integer pageNum, Integer pageSize, String surveyName) {
         return surveyService.listLikeSurvey(pageNum, pageSize, surveyName);
     }
     /**
