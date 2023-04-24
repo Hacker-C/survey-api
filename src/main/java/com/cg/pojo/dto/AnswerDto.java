@@ -13,5 +13,6 @@ public class AnswerDto {
     private String title;
     private String description;
     private LocalDateTime expireTime;
+    private Long total;
     private List<QuestionDto4> questions;
 }

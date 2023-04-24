@@ -55,7 +55,8 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
         assertionWithSystemException(success, SURVEY_NOT_EXIST);
         assertionWithSystemException(survey.getStatus() != 1, SURVEY_NOT_PUBLISH);
         AnswerDto answerDto = CopyBeanUtil.copy(survey, AnswerDto.class);
-
+        Long count = count(new LambdaQueryWrapper<Answer>().eq(Answer::getSurveyId, surveyId));
+        answerDto.setTotal(count);
         List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, surveyId));
         List<QuestionDto4> questionDto4s = questions.stream().map(question -> {
             QuestionDto4 questionDto4 = CopyBeanUtil.copy(question, QuestionDto4.class);
