@@ -79,6 +79,7 @@ CREATE TABLE `t_survey`  (
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '问卷的标题',
   `status` int NOT NULL DEFAULT 0 COMMENT '是否发布，0 未发布，1 发布',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '问卷描述',
+  `is_like` int(0) NOT NULL DEFAULT 0 COMMENT '是否收藏，0 未收藏，1 收藏',
   `expire_time` datetime(0) NULL DEFAULT NULL COMMENT '截止时间',
   `create_time` datetime(0) NOT NULL COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL COMMENT '更新时间',

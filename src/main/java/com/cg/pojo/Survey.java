@@ -22,7 +22,7 @@ public class Survey implements Serializable {
     private String title;
 
     private Integer status;
-
+    private Integer isLike;
     private String description;
 
     private LocalDateTime expireTime;

@@ -56,4 +56,5 @@ public class SystemConst {
     public static final String DELETE_FAIL = "删除数据失败";
 
 
+    public static final String LIKE_ERROR = "收藏表示字段不合法";
 }

@@ -13,6 +13,7 @@ public class SurveyDto {
     private Integer id;
     private String title;
     private Integer status;
+    private Integer isLike;
     private String description;
     private LocalDateTime expireTime;
     private LocalDateTime createTime;

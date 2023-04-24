@@ -12,8 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.cg.mapper")
 public class SurveyApplication
 {
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) {
         SpringApplication.run(SurveyApplication.class, args);
     }
 }

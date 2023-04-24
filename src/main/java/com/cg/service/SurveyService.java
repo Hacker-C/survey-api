@@ -2,6 +2,8 @@ package com.cg.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cg.pojo.Survey;
+import com.cg.pojo.dto.PageDto;
+import com.cg.pojo.dto.SurveyDto2;
 import com.cg.pojo.vo.SurveyVo;
 import com.cg.pojo.vo.SurveyVo2;
 import com.cg.result.Result;
@@ -21,9 +23,15 @@ public interface SurveyService extends IService<Survey> {
 
     Result deleteSurvey(Integer id);
 
-    Result listSurvey(Integer pageNum, Integer pageSize, Integer status);
+    Result listSurvey(Integer pageNum, Integer pageSize, Integer status, String surveyName);
 
     Result listSurveyName();
 
     Result getSurveyOverAll(Integer id);
+
+    Result listRecycleSurvey(Integer pageNum, Integer pageSize, String surveyName);
+
+    Result updateSurveyLike(Integer id, Integer isLike);
+
+    Result listLikeSurvey(Integer pageNum, Integer pageSize, String surveyName);
 }

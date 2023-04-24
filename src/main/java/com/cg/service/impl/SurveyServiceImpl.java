@@ -83,7 +83,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result updateSurveyStatus(Integer id, Integer status) {
-        boolean success = Objects.isNull(status) || (status != 1 && status != 0);
+        boolean success = Objects.isNull(status) || (status != 1 && status != 0 && status != 2);
         assertionWithRuntimeException(success, STATUS_ERROR);
         Survey survey = getById(id);
         success = Objects.isNull(survey) || !survey.getUserId().equals(getUserId());
@@ -119,7 +119,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public Result listSurvey(Integer pageNum, Integer pageSize, Integer status) {
+    public Result listSurvey(Integer pageNum, Integer pageSize, Integer status, String surveyName) {
         assertionWithSystemException(Objects.isNull(pageNum) || Objects.isNull(pageSize), PARAMETER_ERROR);
         boolean success = Objects.nonNull(status) && status != 1 && status != 0;
         assertionWithRuntimeException(success, STATUS_ERROR);
@@ -129,16 +129,17 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
         User user = userService.getById(getUserId());
         if(user.getRole() == 1)
             queryWrapper = new LambdaQueryWrapper<Survey>().eq(Objects.nonNull(status), Survey::getStatus, status)
+                    .like(Objects.nonNull(surveyName), Survey::getTitle, surveyName)
                     .orderByAsc(Survey::getCreateTime);
         else {
             queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(Objects.nonNull(status), Survey::getStatus, status)
+                    .like(Objects.nonNull(surveyName), Survey::getTitle, surveyName)
                     .eq(Survey::getUserId, user.getId()).orderByAsc(Survey::getCreateTime);
         }
         page(pageInfo, queryWrapper);
         PageDto<SurveyDto> pageDto = CopyBeanUtil.copyPage(pageInfo.getTotal(), pageInfo.getRecords(), SurveyDto.class);
         return Result.ok(pageDto);
-
     }
 
     @Override
@@ -172,6 +173,62 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
         surveyDto3.setNickname(getUser().getNickname());
         return Result.ok(surveyDto3);
     }
+
+    @Override
+    public Result listRecycleSurvey(Integer pageNum, Integer pageSize, String surveyName) {
+        assertionWithSystemException(Objects.isNull(pageNum) || Objects.isNull(pageSize), PARAMETER_ERROR);
+        Page<Survey> pageInfo  = new Page<>(pageNum, pageSize);
+        LambdaQueryWrapper<Survey> queryWrapper;
+        //根据不同的角色展示对应的数据
+        User user = userService.getById(getUserId());
+        if(user.getRole() == 1)
+            queryWrapper = new LambdaQueryWrapper<Survey>().eq(Survey::getStatus, 2)
+                    .like(Objects.nonNull(surveyName), Survey::getTitle, surveyName)
+                    .orderByAsc(Survey::getCreateTime);
+        else {
+            queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Survey::getStatus, 2)
+                    .like(Objects.nonNull(surveyName), Survey::getTitle, surveyName)
+                    .eq(Survey::getUserId, user.getId()).orderByAsc(Survey::getCreateTime);
+        }
+        page(pageInfo, queryWrapper);
+        PageDto<SurveyDto2> pageDto = CopyBeanUtil.copyPage(pageInfo.getTotal(), pageInfo.getRecords(), SurveyDto2.class);
+        return Result.ok(pageDto);
+    }
+
+    @Override
+    public Result updateSurveyLike(Integer id, Integer isLike) {
+        boolean success = Objects.isNull(isLike) || (isLike != 1 && isLike != 0);
+        assertionWithRuntimeException(success, LIKE_ERROR);
+        Survey survey = getById(id);
+        success = Objects.isNull(survey) || !survey.getUserId().equals(getUserId());
+        assertionWithSystemException(success, SURVEY_NOT_EXIST);
+        survey.setIsLike(isLike);
+        return updateById(survey) ? Result.ok() : Result.fail(UPDATE_FAIL);
+    }
+
+    @Override
+    public Result listLikeSurvey(Integer pageNum, Integer pageSize, String surveyName) {
+        assertionWithSystemException(Objects.isNull(pageNum) || Objects.isNull(pageSize), PARAMETER_ERROR);
+        Page<Survey> pageInfo  = new Page<>(pageNum, pageSize);
+        LambdaQueryWrapper<Survey> queryWrapper;
+        //根据不同的角色展示对应的数据
+        User user = userService.getById(getUserId());
+        if(user.getRole() == 1)
+            queryWrapper = new LambdaQueryWrapper<Survey>().eq(Survey::getIsLike, 1)
+                    .like(Objects.nonNull(surveyName), Survey::getTitle, surveyName)
+                    .orderByAsc(Survey::getCreateTime);
+        else {
+            queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Survey::getIsLike, 1)
+                    .like(Objects.nonNull(surveyName), Survey::getTitle, surveyName)
+                    .eq(Survey::getUserId, user.getId()).orderByAsc(Survey::getCreateTime);
+        }
+        page(pageInfo, queryWrapper);
+        PageDto<SurveyDto2> pageDto = CopyBeanUtil.copyPage(pageInfo.getTotal(), pageInfo.getRecords(), SurveyDto2.class);
+        return Result.ok(pageDto);
+    }
+
 
     private Long getUserId() {
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

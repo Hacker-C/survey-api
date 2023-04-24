@@ -18,7 +18,6 @@ import java.util.List;
 public class SurveyController {
     @Autowired
     private SurveyService surveyService;
-
     @PostMapping
     public Result saveSurvey(@RequestBody SurveyVo surveyVo) {
         return surveyService.saveSurvey(surveyVo);
@@ -32,16 +31,30 @@ public class SurveyController {
         return surveyService.updateSurveyStatus(id, status);
     }
 
+    @PutMapping("/like/{id}")
+    public Result updateSurveyLike(@PathVariable Integer id, Integer isLike) {
+        return surveyService.updateSurveyLike(id, isLike);
+    }
+
     @DeleteMapping("{id}")
     public Result deleteSurvey(@PathVariable Integer id) {
         return surveyService.deleteSurvey(id);
     }
 
     @GetMapping
-    public Result<PageDto<SurveyDto>> listSurvey(Integer pageNum, Integer pageSize, Integer status) {
-        return surveyService.listSurvey(pageNum, pageSize, status);
+    public Result<PageDto<SurveyDto>> listSurvey(Integer pageNum, Integer pageSize, Integer status, String surveyName) {
+        return surveyService.listSurvey(pageNum, pageSize, status, surveyName);
     }
 
+    @GetMapping("recycle")
+    public Result<PageDto<SurveyDto2>> listRecycleSurvey(Integer pageNum, Integer pageSize, String surveyName) {
+        return surveyService.listRecycleSurvey(pageNum, pageSize, surveyName);
+    }
+
+    @GetMapping("like")
+    public Result<PageDto<SurveyDto2>> listLikeSurvey(Integer pageNum, Integer pageSize, String surveyName) {
+        return surveyService.listLikeSurvey(pageNum, pageSize, surveyName);
+    }
     /**
      * 辅助搜索问卷下的问题
      * @return
