@@ -47,6 +47,8 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
     @Autowired
     private LogService logService;
 
+
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result analysisAnswer(Integer surveyId) {
@@ -55,7 +57,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
         assertionWithSystemException(success, SURVEY_NOT_EXIST);
         assertionWithSystemException(survey.getStatus() != 1, SURVEY_NOT_PUBLISH);
         AnswerDto answerDto = CopyBeanUtil.copy(survey, AnswerDto.class);
-        Long count = count(new LambdaQueryWrapper<Answer>().eq(Answer::getSurveyId, surveyId));
+        Long count = logService.count(new LambdaQueryWrapper<Log>().eq(Log::getSurveyId, surveyId));
         answerDto.setTotal(count);
         List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, surveyId));
         List<QuestionDto4> questionDto4s = questions.stream().map(question -> {

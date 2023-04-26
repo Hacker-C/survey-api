@@ -12,4 +12,6 @@ import com.cg.result.Result;
 public interface LinkSurveyService extends IService<LinkSurvey> {
 
     Result getSurveyByLinkId(Integer id);
+
+    Result<String> getLinkBySurveyId(Integer surveyId);
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cg.mapper.LinkSurveyMapper;
 import com.cg.pojo.LinkSurvey;
 import com.cg.pojo.Log;
+import com.cg.pojo.Survey;
 import com.cg.result.Result;
 import com.cg.service.LinkSurveyService;
 import com.cg.service.LogService;
@@ -40,7 +41,6 @@ public class LinkSurveyServiceImpl extends ServiceImpl<LinkSurveyMapper, LinkSur
 
     @Override
     public Result getSurveyByLinkId(Integer id) {
-
         LinkSurvey linkSurvey = getById(id);
         assertionWithSystemException(Objects.isNull(linkSurvey), LINK_NOT_EXIST);
         assertionWithSystemException(linkSurvey.getStatus() != 1, SURVEY_NOT_PUBLISH);
@@ -52,6 +52,13 @@ public class LinkSurveyServiceImpl extends ServiceImpl<LinkSurveyMapper, LinkSur
 
         Result result = surveyService.getSurveyOverAll(linkSurvey.getSurveyId());
         return Result.ok(result.getData());
+    }
+
+    @Override
+    public Result<String> getLinkBySurveyId(Integer surveyId) {
+        LinkSurvey linkSurvey = getOne(new LambdaQueryWrapper<LinkSurvey>().eq(LinkSurvey::getSurveyId, surveyId));
+        assertionWithSystemException(Objects.isNull(linkSurvey), LINK_NOT_EXIST);
+        return Result.ok(linkSurvey.getLink());
     }
 }
 

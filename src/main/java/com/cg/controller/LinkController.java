@@ -22,4 +22,9 @@ public class LinkController {
     public Result<SurveyDto3> getSurveyByLinkId(@PathVariable Integer id) {
         return linkSurveyService.getSurveyByLinkId(id);
     }
+
+    @GetMapping("name")
+    public Result<String> getLinkBySurveyId(Integer surveyId) {
+        return linkSurveyService.getLinkBySurveyId(surveyId);
+    }
 }
