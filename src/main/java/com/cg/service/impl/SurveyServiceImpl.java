@@ -59,7 +59,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
         Survey survey = CopyBeanUtil.copy(surveyVo, Survey.class);
         survey.setUserId(getUserId());
 
-        return save(survey) ? Result.ok() : Result.fail(SAVE_FAIL);
+        return save(survey) ? Result.ok(survey.getId()) : Result.fail(SAVE_FAIL);
 
     }
 

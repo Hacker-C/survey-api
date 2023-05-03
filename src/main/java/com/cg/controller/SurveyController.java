@@ -16,7 +16,7 @@ public class SurveyController {
     @Autowired
     private SurveyService surveyService;
     @PostMapping
-    public Result saveSurvey(@RequestBody SurveyVo surveyVo) {
+    public Result<Integer> saveSurvey(@RequestBody SurveyVo surveyVo) {
         return surveyService.saveSurvey(surveyVo);
     }
     @PutMapping
