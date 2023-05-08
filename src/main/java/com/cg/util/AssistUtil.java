@@ -49,7 +49,7 @@ public class AssistUtil {
         if(Objects.isNull(type))
             return true;
         boolean result = true;
-        for(int i = 1; i <= 4; i++)
+        for(int i = 1; i <= 16; i++)
             if(type == i) {
                 result = false;
                 break;
