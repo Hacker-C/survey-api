@@ -64,6 +64,7 @@ CREATE TABLE `t_question`  (
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '问题的内容',
   `type` int NOT NULL COMMENT '问题类型，1 单选 2 多选 3 填空 4 评分',
   `required` int NOT NULL DEFAULT 1 COMMENT '是否必答，0 否 1 是',
+  `sort` int NOT NULL DEFAULT 0 COMMENT '问题顺序',
   `create_time` datetime(0) NOT NULL COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE

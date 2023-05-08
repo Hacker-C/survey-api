@@ -13,5 +13,6 @@ public class QuestionDto4 {
     private Integer type;
 
     private Integer required;
+    private Integer sort;
     private List<OptionDto2> options;
 }

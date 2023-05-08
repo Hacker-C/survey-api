@@ -11,5 +11,5 @@ public class QuestionVo {
     private String title;
     private Integer type;
     private Integer required;
-
+    private Integer sort;
 }

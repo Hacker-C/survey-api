@@ -16,7 +16,7 @@ public class QuestionDto {
     private Integer type;
 
     private Integer required;
-
+    private Integer sort;
     private LocalDateTime createTime;
 
 

@@ -7,7 +7,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @TableName question
@@ -24,7 +23,7 @@ public class Question implements Serializable {
     private Integer type;
 
     private Integer required;
-
+    private Integer sort;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)

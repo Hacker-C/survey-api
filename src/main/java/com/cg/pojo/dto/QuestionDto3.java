@@ -16,6 +16,6 @@ public class QuestionDto3 {
     private Integer type;
 
     private Integer required;
-
+    private Integer sort;
     private List<OptionDto> options;
 }
