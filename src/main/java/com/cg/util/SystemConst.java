@@ -33,7 +33,6 @@ public class SystemConst {
     public static final String PASSWORD_NOT_CONSISTENT = "密码不一致";
     public static final String PASSWORD_ERROR = "密码错误";
     public static final String TITLE_NOT_EMPTY = "标题不能为空";
-    public static final String TITLE_EXIST = "标题已存在";
     public static final String SURVEY_NOT_EXIST = "问卷不存在";
     public static final String EXPIRE_TIME_NOT_EMPTY = "截止时间不能为空";
     public static final String EXPIRE_TIME_ERROR = "截止时间小于当前时间";

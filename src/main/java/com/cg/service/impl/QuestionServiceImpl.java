@@ -58,7 +58,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         assertionWithSystemException(checkType(type), TYPE_ERROR);
         success = Objects.nonNull(required) && required != 1 && required != 0;
         assertionWithSystemException(success, REQUIRED_ERROR);
-        assertionWithSystemException(count(new LambdaQueryWrapper<Question>().eq(Question::getTitle, title)) > 0, TITLE_EXIST);
         Question question = CopyBeanUtil.copy(questionVo, Question.class);
         return save(question) ? Result.ok() : Result.fail(SAVE_FAIL);
     }
@@ -77,7 +76,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         assertionWithSystemException(checkType(type), TYPE_ERROR);
         success = Objects.nonNull(required) && (required != 1 && required != 0);
         assertionWithSystemException(success, REQUIRED_ERROR);
-        assertionWithSystemException(count(new LambdaQueryWrapper<Question>().eq(Question::getTitle, title)) > 0, TITLE_EXIST);
         success = Objects.isNull(id) || Objects.isNull(getById(id));
         assertionWithSystemException(success, QUESTION_NOT_EXIST);
         Question question = CopyBeanUtil.copy(questionVo2, Question.class);

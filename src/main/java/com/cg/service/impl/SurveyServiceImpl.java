@@ -54,10 +54,9 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
         assertionWithSystemException(!StringUtils.hasText(title), TITLE_NOT_EMPTY);
         assertionWithSystemException(Objects.isNull(expiration), EXPIRE_TIME_NOT_EMPTY);
         assertionWithSystemException(checkTime(expiration), EXPIRE_TIME_ERROR);
-
-        assertionWithSystemException(count(new LambdaQueryWrapper<Survey>().eq(Survey::getTitle, title)) > 0, TITLE_EXIST);
+        Long userId = getUserId();
         Survey survey = CopyBeanUtil.copy(surveyVo, Survey.class);
-        survey.setUserId(getUserId());
+        survey.setUserId(userId);
 
         return save(survey) ? Result.ok(survey.getId()) : Result.fail(SAVE_FAIL);
 

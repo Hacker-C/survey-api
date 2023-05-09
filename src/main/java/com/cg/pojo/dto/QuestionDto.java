@@ -18,7 +18,4 @@ public class QuestionDto {
     private Integer required;
     private Integer sort;
     private LocalDateTime createTime;
-
-
-
 }
