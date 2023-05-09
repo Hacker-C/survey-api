@@ -21,7 +21,7 @@
         update_time
     </sql>
     <select id="countQuestions" resultType="java.lang.Long">
-        select count(*) from survey s
+        select count(*) from t_survey s
                         where s.user_id = #{userId}
                         and s.id = (select q.survey_id from question q where q.id = #{questionId})
     </select>
