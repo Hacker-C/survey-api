@@ -3,13 +3,17 @@ package com.cg.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cg.mapper.AnswerMapper;
-import com.cg.mapper.QuestionMapper;
 import com.cg.pojo.*;
-import com.cg.pojo.dto.*;
+import com.cg.pojo.dto.AnswerDto;
+import com.cg.pojo.dto.OptionDto2;
+import com.cg.pojo.dto.QuestionDto4;
 import com.cg.pojo.vo.AnswerVo;
 import com.cg.pojo.vo.AnswerVo2;
 import com.cg.result.Result;
-import com.cg.service.*;
+import com.cg.service.AnswerService;
+import com.cg.service.LogService;
+import com.cg.service.QuestionService;
+import com.cg.service.SurveyService;
 import com.cg.util.CopyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,11 +63,13 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
         AnswerDto answerDto = CopyBeanUtil.copy(survey, AnswerDto.class);
         Long count = logService.count(new LambdaQueryWrapper<Log>().eq(Log::getSurveyId, surveyId));
         answerDto.setTotal(count);
-        List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, surveyId));
+        List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, surveyId)
+                .orderByAsc(Question::getSort));
         List<QuestionDto4> questionDto4s = questions.stream().map(question -> {
             QuestionDto4 questionDto4 = CopyBeanUtil.copy(question, QuestionDto4.class);
             // 查询全部的答案
-            List<Answer> answers = list(new LambdaQueryWrapper<Answer>().eq(Answer::getSurveyId, surveyId).eq(Answer::getQuestionId, question.getId()));
+            List<Answer> answers = list(new LambdaQueryWrapper<Answer>().eq(Answer::getSurveyId, surveyId).
+                    eq(Answer::getQuestionId, question.getId()));
             int total = answers.size();
             Map<String, List<Answer>> map = answers.stream().filter(answer -> !answer.getOptionId().equals(0))
                     .collect(Collectors.groupingBy(Answer::getContent));

@@ -160,7 +160,8 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
         assertionWithSystemException(survey.getStatus() != 1, SURVEY_NOT_PUBLISH);
         //填入用户信息
         SurveyDto3 surveyDto3 = CopyBeanUtil.copy(survey, SurveyDto3.class);
-        List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, id));
+        List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, id)
+                .orderByAsc(Question::getSort));
         List<QuestionDto3> questionDto3s = questions.stream().map(question -> {
             QuestionDto3 questionDto3 = CopyBeanUtil.copy(question, QuestionDto3.class);
             List<Option> options = optionService.list(new LambdaQueryWrapper<Option>().eq(Option::getQuestionId, question.getId()));

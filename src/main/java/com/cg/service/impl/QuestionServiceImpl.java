@@ -8,7 +8,9 @@ import com.cg.pojo.LoginUser;
 import com.cg.pojo.Question;
 import com.cg.pojo.Survey;
 import com.cg.pojo.User;
-import com.cg.pojo.dto.*;
+import com.cg.pojo.dto.PageDto;
+import com.cg.pojo.dto.QuestionDto;
+import com.cg.pojo.dto.QuestionDto2;
 import com.cg.pojo.vo.QuestionVo;
 import com.cg.pojo.vo.QuestionVo2;
 import com.cg.result.Result;
@@ -16,7 +18,6 @@ import com.cg.service.QuestionService;
 import com.cg.service.SurveyService;
 import com.cg.service.UserService;
 import com.cg.util.CopyBeanUtil;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -106,7 +107,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         User user = userService.getById(getUserId());
         if(user.getRole() == 1)
             queryWrapper = new LambdaQueryWrapper<Question>().eq(Objects.nonNull(surveyId), Question::getSurveyId, surveyId)
-                    .orderByAsc(Question::getCreateTime);
+                    .orderByAsc(Question::getSort);
         else {
 
             queryWrapper = new LambdaQueryWrapper<>();
@@ -119,7 +120,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
                         .stream().map(Survey::getId).collect(Collectors.toList());
                 queryWrapper.in(Question::getSurveyId, surveyIds);
             }
-            queryWrapper.orderByAsc(Question::getCreateTime);
+            queryWrapper.orderByAsc(Question::getSort);
         }
         page(pageInfo, queryWrapper);
         PageDto<QuestionDto> pageDto = CopyBeanUtil.copyPage(pageInfo.getTotal(), pageInfo.getRecords(), QuestionDto.class);

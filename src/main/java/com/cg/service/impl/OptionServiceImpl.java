@@ -7,9 +7,7 @@ import com.cg.mapper.OptionMapper;
 import com.cg.mapper.QuestionMapper;
 import com.cg.pojo.*;
 import com.cg.pojo.dto.OptionDto;
-import com.cg.pojo.dto.OptionDto2;
 import com.cg.pojo.dto.PageDto;
-import com.cg.pojo.dto.QuestionDto;
 import com.cg.pojo.vo.OptionVo;
 import com.cg.pojo.vo.OptionVo2;
 import com.cg.result.Result;
@@ -18,7 +16,6 @@ import com.cg.service.QuestionService;
 import com.cg.service.SurveyService;
 import com.cg.service.UserService;
 import com.cg.util.CopyBeanUtil;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,7 +27,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.cg.util.AssistUtil.*;
+import static com.cg.util.AssistUtil.assertionWithRuntimeException;
+import static com.cg.util.AssistUtil.assertionWithSystemException;
 import static com.cg.util.SystemConst.*;
 
 /**
@@ -127,9 +125,9 @@ public class OptionServiceImpl extends ServiceImpl<OptionMapper, Option>
                                 eq(Survey::getUserId, user.getId()))
                         .stream().map(Survey::getId).collect(Collectors.toList());
                 List<Integer> questionIds = questionService.list(new LambdaQueryWrapper<Question>()
-                                .in(Question::getSurveyId, surveyIds))
+                                .in(Question::getSurveyId, surveyIds).orderByAsc(Question::getSort))
                         .stream().map(Question::getId).collect(Collectors.toList());
-                queryWrapper.in(Option::getQuestionId, surveyIds);
+                queryWrapper.in(Option::getQuestionId, questionIds);
             }
         }
         page(pageInfo, queryWrapper);
