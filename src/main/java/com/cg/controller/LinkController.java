@@ -19,8 +19,8 @@ public class LinkController {
      * @return
      */
     @GetMapping("{id}")
-    public Result<SurveyDto3> getSurveyByLinkId(@PathVariable Integer id) {
-        return linkSurveyService.getSurveyByLinkId(id);
+    public Result<SurveyDto3> getSurveyByLinkId(@PathVariable String name) {
+        return linkSurveyService.getSurveyByLinkId(name);
     }
 
     @GetMapping("name")

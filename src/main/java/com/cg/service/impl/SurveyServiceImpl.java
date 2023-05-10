@@ -156,7 +156,6 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey>
         Survey survey = getById(id);
         boolean success = Objects.isNull(survey) || !survey.getUserId().equals(getUserId());
         assertionWithSystemException(success, SURVEY_NOT_EXIST);
-        assertionWithSystemException(survey.getStatus() != 1, SURVEY_NOT_PUBLISH);
         //填入用户信息
         SurveyDto3 surveyDto3 = CopyBeanUtil.copy(survey, SurveyDto3.class);
         List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, id)

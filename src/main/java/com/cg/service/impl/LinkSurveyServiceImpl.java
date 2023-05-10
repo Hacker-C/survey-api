@@ -5,20 +5,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cg.mapper.LinkSurveyMapper;
 import com.cg.pojo.LinkSurvey;
 import com.cg.pojo.Log;
-import com.cg.pojo.Survey;
 import com.cg.result.Result;
 import com.cg.service.LinkSurveyService;
 import com.cg.service.LogService;
 import com.cg.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.mvc.condition.RequestConditionHolder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 import static com.cg.util.AssistUtil.assertionWithSystemException;
@@ -40,8 +35,8 @@ public class LinkSurveyServiceImpl extends ServiceImpl<LinkSurveyMapper, LinkSur
     private LogService logService;
 
     @Override
-    public Result getSurveyByLinkId(Integer id) {
-        LinkSurvey linkSurvey = getById(id);
+    public Result getSurveyByLinkId(String name) {
+        LinkSurvey linkSurvey = getOne(new LambdaQueryWrapper<LinkSurvey>().eq(LinkSurvey::getLink, name));
         assertionWithSystemException(Objects.isNull(linkSurvey), LINK_NOT_EXIST);
         assertionWithSystemException(linkSurvey.getStatus() != 1, SURVEY_NOT_PUBLISH);
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
