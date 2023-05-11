@@ -77,19 +77,23 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
             List<OptionDto2> list = new ArrayList<>();
             for (Map.Entry<String, List<Answer>> entry : map.entrySet()) {
                 int size = entry.getValue().size();
-                String cotent = entry.getKey();
+                String content = entry.getKey();
                 OptionDto2 optionDto2 = new OptionDto2();
-
                 int percent = new Double(Math.floor(1.0 * size / total * 100)).intValue();
                 sum += percent;
-                optionDto2.setContent(cotent).setNumber(size).setPercent(percent);
+                optionDto2.setContent(content).setNumber(size).setPercent(percent);
                 list.add(optionDto2);
             }
+
+
 
             if (list.size() > 1 && sum != 100) {
                 int percent = list.get(0).getPercent();
                 list.get(0).setPercent(percent + 100 - sum);
             }
+            List<Answer> answerList = answers.stream().filter(answer -> answer.getOptionId().equals(0)).collect(Collectors.toList());
+            for (Answer answer : answerList)
+                list.add(CopyBeanUtil.copy(answer, OptionDto2.class));
             questionDto4.setOptions(list);
             return questionDto4;
         }).collect(Collectors.toList());

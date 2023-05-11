@@ -9,9 +9,7 @@ import java.util.List;
 @ApiModel
 public class QuestionDto4 {
     private String title;
-
     private Integer type;
-
     private Integer required;
     private Integer sort;
     private List<OptionDto2> options;
