@@ -10,10 +10,7 @@ import com.cg.pojo.dto.QuestionDto4;
 import com.cg.pojo.vo.AnswerVo;
 import com.cg.pojo.vo.AnswerVo2;
 import com.cg.result.Result;
-import com.cg.service.AnswerService;
-import com.cg.service.LogService;
-import com.cg.service.QuestionService;
-import com.cg.service.SurveyService;
+import com.cg.service.*;
 import com.cg.util.CopyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,10 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.cg.util.AssistUtil.assertionWithSystemException;
@@ -51,6 +45,9 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
     @Autowired
     private LogService logService;
 
+    @Autowired
+    private OptionService optionService;
+
 
 
     @Override
@@ -65,8 +62,20 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
         answerDto.setTotal(count);
         List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSurveyId, surveyId)
                 .orderByAsc(Question::getSort));
+        Map<String, Integer> indexMap = new HashMap<>();
         List<QuestionDto4> questionDto4s = questions.stream().map(question -> {
             QuestionDto4 questionDto4 = CopyBeanUtil.copy(question, QuestionDto4.class);
+            //初始化该问题下全部选项的数量和百分比
+            int index = 0;
+            List<OptionDto2> list = new ArrayList<>();
+            List<Option> options = optionService.list(new LambdaQueryWrapper<Option>().eq(Option::getQuestionId, question.getId()));
+            for (Option option : options) {
+                OptionDto2 optionDto2 = CopyBeanUtil.copy(option, OptionDto2.class);
+                optionDto2.setPercent(0).setNumber(0);
+                String key = optionDto2.getContent() + question.getId();
+                indexMap.put(key, index++);
+                list.add(optionDto2);
+            }
             // 查询全部的答案
             List<Answer> answers = list(new LambdaQueryWrapper<Answer>().eq(Answer::getSurveyId, surveyId).
                     eq(Answer::getQuestionId, question.getId()));
@@ -74,23 +83,19 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer>
             Map<String, List<Answer>> map = answers.stream().filter(answer -> !answer.getOptionId().equals(0))
                     .collect(Collectors.groupingBy(Answer::getContent));
             int sum = 0;
-            List<OptionDto2> list = new ArrayList<>();
             for (Map.Entry<String, List<Answer>> entry : map.entrySet()) {
                 int size = entry.getValue().size();
-                String content = entry.getKey();
-                OptionDto2 optionDto2 = new OptionDto2();
+                String content = entry.getKey() + question.getId();
+                OptionDto2 optionDto2 = list.get(indexMap.get(content));
                 int percent = new Double(Math.floor(1.0 * size / total * 100)).intValue();
                 sum += percent;
-                optionDto2.setContent(content).setNumber(size).setPercent(percent);
-                list.add(optionDto2);
+                optionDto2.setNumber(size).setPercent(percent);
             }
-
-
-
             if (list.size() > 1 && sum != 100) {
                 int percent = list.get(0).getPercent();
                 list.get(0).setPercent(percent + 100 - sum);
             }
+            //填空题
             List<Answer> answerList = answers.stream().filter(answer -> answer.getOptionId().equals(0)).collect(Collectors.toList());
             for (Answer answer : answerList)
                 list.add(CopyBeanUtil.copy(answer, OptionDto2.class));
